@@ -67,18 +67,20 @@ export const CardsPage: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCards.map(card => (
-            <div key={card.id} className="relative group">
+            <div key={card.id} className="group flex flex-col gap-2">
               <FlashcardCard card={card} size="sm" interactive={true} />
-              {/* Nút xóa luôn hiển thị — hoạt động cả mobile */}
+              {/* Nút xóa nằm bên dưới card, không che nội dung */}
               <button
                 onClick={(e) => { e.stopPropagation(); handleDelete(card.id); }}
-                className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white
-                  p-1.5 rounded-full shadow opacity-0 group-hover:opacity-100
-                  focus:opacity-100 transition-opacity"
+                className="flex items-center justify-center gap-1 text-sm text-red-500
+                  hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/30
+                  py-1 rounded-lg opacity-0 group-hover:opacity-100
+                  focus:opacity-100 transition-opacity w-full"
                 title="Xóa card"
                 aria-label="Xóa card"
               >
                 <Trash2 size={14} />
+                <span>Xóa</span>
               </button>
             </div>
           ))}

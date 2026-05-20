@@ -37,7 +37,7 @@ export const FlashcardCard: React.FC<FlashcardProps> = ({
   };
 
   const sizeClasses = {
-    sm: 'h-40',
+    sm: 'h-56',
     md: 'h-64',
     lg: 'h-96',
   };

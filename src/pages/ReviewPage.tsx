@@ -49,7 +49,7 @@ export const ReviewPage: React.FC<{ onNavigate: (path: string) => void }> = ({ o
           </p>
         )}
 
-        <Button variant="secondary" onClick={() => (window.location.href = '/')}>
+        <Button variant="secondary" onClick={() => onNavigate('/')}>
           Back to Dashboard
         </Button>
       </div>
@@ -77,7 +77,7 @@ export const ReviewPage: React.FC<{ onNavigate: (path: string) => void }> = ({ o
       const correctTotal = correct + (isCorrect ? 1 : 0);
       const accuracy = ((correctTotal / total) * 100).toFixed(1);
       showToast(`Ôn tập xong! Chính xác: ${accuracy}% 🎊`, 'success');
-      setTimeout(() => (window.location.href = '/'), 1500);
+      setTimeout(() => onNavigate('/'), 1500);
     }
   };
 

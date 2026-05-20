@@ -18,7 +18,7 @@ function sortByDifficulty(pool: Flashcard[]): Flashcard[] {
   });
 }
 
-export const LearnPage: React.FC = () => {
+export const LearnPage: React.FC<{ onNavigate: (path: string) => void }> = ({ onNavigate }) => {
   const { cards, reviewCard, showToast, recordReview } = useFlashcard();
 
   // Tạo pool 1 lần khi mount (stable)
@@ -54,7 +54,7 @@ export const LearnPage: React.FC = () => {
         <p className="text-xl text-gray-600 dark:text-gray-400">
           Tuyệt vời! Không còn từ nào cần học. 🎉
         </p>
-        <Button onClick={() => (window.location.href = '/')}>Back to Dashboard</Button>
+        <Button onClick={() => onNavigate('/')}>Back to Dashboard</Button>
       </div>
     );
   }
@@ -177,7 +177,7 @@ export const LearnPage: React.FC = () => {
               Tiếp tục ({remaining} từ)
             </Button>
           )}
-          <Button variant="secondary" onClick={() => (window.location.href = '/')}>
+          <Button variant="secondary" onClick={() => onNavigate('/')}>
             Back to Dashboard
           </Button>
         </div>

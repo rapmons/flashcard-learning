@@ -27,11 +27,11 @@ function AppContent() {
       case '/':
         return <HomePage onNavigate={setCurrentPage} />;
       case '/learn':
-        return <LearnPage />;
+        return <LearnPage onNavigate={setCurrentPage} />;
       case '/review':
-        return <ReviewPage />;
+        return <ReviewPage onNavigate={setCurrentPage} />;
       case '/quiz':
-        return <QuizPage />;
+        return <QuizPage onNavigate={setCurrentPage} />;
       case '/cards':
         return <CardsPage />;
       case '/stats':

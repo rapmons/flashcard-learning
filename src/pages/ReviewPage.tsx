@@ -5,7 +5,7 @@ import { ReviewCard } from '@components/index';
 import { Button } from '@components/UI';
 import { ChevronLeft, ChevronRight, CheckCircle, Clock } from 'lucide-react';
 
-export const ReviewPage: React.FC = () => {
+export const ReviewPage: React.FC<{ onNavigate: (path: string) => void }> = ({ onNavigate }) => {
   const { cards, reviewCard, showToast, recordReview } = useFlashcard();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [reviewed, setReviewed] = useState(0);
@@ -37,7 +37,7 @@ export const ReviewPage: React.FC = () => {
             <Button
               variant="primary"
               size="sm"
-              onClick={() => (window.location.href = '/learn')}
+              onClick={() => onNavigate('/learn')}
               className="mt-2"
             >
               Đi đến Learn Mode

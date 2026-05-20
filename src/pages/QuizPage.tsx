@@ -11,7 +11,7 @@ interface QuizQuestion {
   options: Flashcard[];
 }
 
-export const QuizPage: React.FC = () => {
+export const QuizPage: React.FC<{ onNavigate: (path: string) => void }> = ({ onNavigate }) => {
   const { cards, reviewCard, showToast, recordReview } = useFlashcard();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [correct, setCorrect] = useState(0);
@@ -36,7 +36,7 @@ export const QuizPage: React.FC = () => {
         <p className="text-xl text-gray-600 dark:text-gray-400 mb-4">
           Cần ít nhất 2 flashcard để chơi Quiz!
         </p>
-        <Button onClick={() => (window.location.href = '/')}>
+        <Button onClick={() => onNavigate('/')}>
           Back to Dashboard
         </Button>
       </div>
@@ -49,7 +49,7 @@ export const QuizPage: React.FC = () => {
         <p className="text-xl text-gray-600 dark:text-gray-400 mb-4">
           No cards available for quiz!
         </p>
-        <Button onClick={() => (window.location.href = '/')}>
+        <Button onClick={() => onNavigate('/')}>
           Back to Dashboard
         </Button>
       </div>
@@ -89,10 +89,18 @@ export const QuizPage: React.FC = () => {
           </div>
         </div>
         <div className="flex gap-4 justify-center">
-          <Button variant="secondary" onClick={() => window.location.reload()}>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              setIsFinished(false);
+              setCurrentIndex(0);
+              setCorrect(0);
+              setIncorrect(0);
+            }}
+          >
             Play Again
           </Button>
-          <Button onClick={() => (window.location.href = '/')}>
+          <Button onClick={() => onNavigate('/')}>
             Back to Dashboard
           </Button>
         </div>

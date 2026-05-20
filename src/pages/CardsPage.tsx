@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { useFlashcard } from '@context/FlashcardContext';
 import { searchCards, filterCards } from '@services/cardService';
-import { FlashcardCard, Input, Button } from '@components/index';
+import { FlashcardCard, Input } from '@components/index';
 import { Trash2 } from 'lucide-react';
 
 export const CardsPage: React.FC = () => {
   const { cards, deleteCard, showToast } = useFlashcard();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'new' | 'learning' | 'remembered'>('all');
-  const [selectedCard, setSelectedCard] = useState<number | null>(null);
 
   const filteredCards = statusFilter === 'all'
     ? searchCards(cards, searchQuery)

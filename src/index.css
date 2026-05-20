@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  @apply transition-colors;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100;
+}
+
+/* Smooth transitions */
+@layer components {
+  .card-flip {
+    @apply transition-transform duration-500;
+  }
+
+  .fade-in {
+    @apply animate-fade-in;
+  }
+
+  .slide-up {
+    @apply animate-slide-up;
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  @apply w-2 h-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-gray-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-400 dark:bg-gray-600 rounded-lg hover:bg-gray-500 dark:hover:bg-gray-500;
+}

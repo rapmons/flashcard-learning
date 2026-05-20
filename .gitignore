@@ -1,0 +1,22 @@
+node_modules
+.DS_Store
+dist
+dist-ssr
+*.local
+.env
+.env.local
+.env.*.local
+*.log
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.prettierrc
+.eslintrc
+
+# Vite
+.vite
+
+# gh-pages
+.nojekyll

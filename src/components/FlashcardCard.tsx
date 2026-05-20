@@ -95,8 +95,24 @@ export const FlashcardCard: React.FC<FlashcardProps> = ({
             </div>
           </div>
 
+          {card.synonyms && card.synonyms.length > 0 && (
+            <div className="mt-4">
+              <p className="text-xs font-semibold opacity-75 mb-1 uppercase">Từ đồng nghĩa</p>
+              <div className="flex flex-wrap gap-2">
+                {card.synonyms.map(syn => (
+                  <span
+                    key={syn}
+                    className="bg-white bg-opacity-20 px-2 py-1 rounded-full text-xs font-medium"
+                  >
+                    {syn}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
           {card.tags && card.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-4">
+            <div className="flex flex-wrap gap-2 mt-2">
               {card.tags.map(tag => (
                 <span
                   key={tag}

@@ -10,7 +10,9 @@ import { formatDate } from '@utils/formatters';
  */
 export function createSessionEntry(
   correct: number,
-  incorrect: number
+  incorrect: number,
+  synonymCorrect: number = 0,
+  synonymIncorrect: number = 0
 ): SessionStats {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -23,6 +25,8 @@ export function createSessionEntry(
     incorrect,
     cardsReviewed,
     accuracy,
+    synonymCorrect,
+    synonymIncorrect,
   };
 }
 
@@ -49,7 +53,9 @@ export function getTodaySession(stats: SessionStats[]): SessionStats | null {
 export function updateTodaySession(
   stats: SessionStats[],
   correct: number,
-  incorrect: number
+  incorrect: number,
+  synonymCorrect: number = 0,
+  synonymIncorrect: number = 0
 ): SessionStats[] {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -61,13 +67,19 @@ export function updateTodaySession(
     return sDate.toISOString() === todayStr;
   });
 
-  const newSession = createSessionEntry(correct, incorrect);
-
   if (existingIndex >= 0) {
+    const existing = stats[existingIndex];
+    const newCorrect = existing.correct + correct;
+    const newIncorrect = existing.incorrect + incorrect;
+    const newSynonymCorrect = (existing.synonymCorrect || 0) + synonymCorrect;
+    const newSynonymIncorrect = (existing.synonymIncorrect || 0) + synonymIncorrect;
+    
     const updated = [...stats];
-    updated[existingIndex] = newSession;
+    updated[existingIndex] = createSessionEntry(newCorrect, newIncorrect, newSynonymCorrect, newSynonymIncorrect);
     return updated;
   }
+
+  const newSession = createSessionEntry(correct, incorrect, synonymCorrect, synonymIncorrect);
 
   return [...stats, newSession];
 }
@@ -85,6 +97,10 @@ export function calculateCumulativeStats(stats: SessionStats[]) {
       currentStreak: 0,
       longestStreak: 0,
       totalSessions: 0,
+      synonymTotalCards: 0,
+      synonymTotalCorrect: 0,
+      synonymTotalIncorrect: 0,
+      synonymOverallAccuracy: 0,
     };
   }
 
@@ -92,6 +108,11 @@ export function calculateCumulativeStats(stats: SessionStats[]) {
   const totalCorrect = stats.reduce((sum, s) => sum + s.correct, 0);
   const totalIncorrect = stats.reduce((sum, s) => sum + s.incorrect, 0);
   const overallAccuracy = totalCards > 0 ? totalCorrect / totalCards : 0;
+
+  const synonymTotalCorrect = stats.reduce((sum, s) => sum + (s.synonymCorrect || 0), 0);
+  const synonymTotalIncorrect = stats.reduce((sum, s) => sum + (s.synonymIncorrect || 0), 0);
+  const synonymTotalCards = synonymTotalCorrect + synonymTotalIncorrect;
+  const synonymOverallAccuracy = synonymTotalCards > 0 ? synonymTotalCorrect / synonymTotalCards : 0;
 
   // Calculate streaks
   const sortedStats = [...stats].sort(
@@ -142,6 +163,10 @@ export function calculateCumulativeStats(stats: SessionStats[]) {
     currentStreak,
     longestStreak,
     totalSessions: stats.length,
+    synonymTotalCards,
+    synonymTotalCorrect,
+    synonymTotalIncorrect,
+    synonymOverallAccuracy,
   };
 }
 

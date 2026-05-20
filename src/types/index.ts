@@ -22,6 +22,7 @@ export interface Flashcard {
   createdAt: string;
   tags?: string[];
   notes?: string;
+  synonyms?: string[];
 }
 
 export interface DeckStats {
@@ -40,6 +41,8 @@ export interface SessionStats {
   incorrect: number;
   cardsReviewed: number;
   accuracy: number;
+  synonymCorrect?: number;
+  synonymIncorrect?: number;
 }
 
 export interface Toast {

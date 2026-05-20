@@ -12,6 +12,7 @@ export const MOCK_CARDS: Flashcard[] = [
     status: 'new',
     createdAt: new Date().toISOString(),
     tags: ['business', 'advanced'],
+    synonyms: ['assist', 'help', 'ease'],
     review: {
       ...createInitialReview(),
       lastReviewed: new Date().toISOString(),
@@ -31,6 +32,7 @@ export const MOCK_CARDS: Flashcard[] = [
     status: 'new',
     createdAt: new Date().toISOString(),
     tags: ['advanced'],
+    synonyms: ['chance', 'luck', 'fluke'],
     review: {
       ...createInitialReview(),
       lastReviewed: new Date().toISOString(),
@@ -50,6 +52,7 @@ export const MOCK_CARDS: Flashcard[] = [
     status: 'learning',
     createdAt: new Date(new Date().setDate(new Date().getDate() - 5)).toISOString(),
     tags: ['communication'],
+    synonyms: ['fluent', 'articulate', 'expressive'],
     review: {
       lastReviewed: new Date(new Date().setDate(new Date().getDate() - 1)).toISOString(),
       nextReview: new Date().toISOString(),
@@ -68,6 +71,7 @@ export const MOCK_CARDS: Flashcard[] = [
     status: 'learning',
     createdAt: new Date(new Date().setDate(new Date().getDate() - 3)).toISOString(),
     tags: ['business'],
+    synonyms: ['practical', 'realistic', 'sensible'],
     review: {
       lastReviewed: new Date(new Date().setDate(new Date().getDate() - 1)).toISOString(),
       nextReview: new Date(new Date().setDate(new Date().getDate() + 2)).toISOString(),
@@ -86,6 +90,7 @@ export const MOCK_CARDS: Flashcard[] = [
     status: 'remembered',
     createdAt: new Date(new Date().setDate(new Date().getDate() - 20)).toISOString(),
     tags: ['poetry', 'advanced'],
+    synonyms: ['fleeting', 'transitory', 'short-lived'],
     review: {
       lastReviewed: new Date(new Date().setDate(new Date().getDate() - 2)).toISOString(),
       nextReview: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString(),
@@ -104,6 +109,7 @@ export const MOCK_CARDS: Flashcard[] = [
     status: 'remembered',
     createdAt: new Date(new Date().setDate(new Date().getDate() - 15)).toISOString(),
     tags: ['advanced'],
+    synonyms: ['vague', 'unclear', 'obscure'],
     review: {
       lastReviewed: new Date(new Date().setDate(new Date().getDate() - 3)).toISOString(),
       nextReview: new Date(new Date().setDate(new Date().getDate() + 5)).toISOString(),
@@ -122,6 +128,7 @@ export const MOCK_CARDS: Flashcard[] = [
     status: 'remembered',
     createdAt: new Date(new Date().setDate(new Date().getDate() - 25)).toISOString(),
     tags: ['work', 'positive'],
+    synonyms: ['careful', 'precise', 'thorough'],
     review: {
       lastReviewed: new Date(new Date().setDate(new Date().getDate() - 4)).toISOString(),
       nextReview: new Date(new Date().setDate(new Date().getDate() + 8)).toISOString(),
@@ -140,6 +147,7 @@ export const MOCK_CARDS: Flashcard[] = [
     status: 'new',
     createdAt: new Date().toISOString(),
     tags: ['business', 'advanced'],
+    synonyms: ['favorable', 'auspicious', 'promising'],
     review: {
       ...createInitialReview(),
       lastReviewed: new Date().toISOString(),
@@ -159,6 +167,7 @@ export const MOCK_CARDS: Flashcard[] = [
     status: 'learning',
     createdAt: new Date(new Date().setDate(new Date().getDate() - 7)).toISOString(),
     tags: ['communication', 'positive'],
+    synonyms: ['honest', 'frank', 'outspoken'],
     review: {
       lastReviewed: new Date().toISOString(),
       nextReview: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString(),
@@ -177,6 +186,7 @@ export const MOCK_CARDS: Flashcard[] = [
     status: 'remembered',
     createdAt: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString(),
     tags: ['positive', 'character'],
+    synonyms: ['kind', 'generous', 'compassionate'],
     review: {
       lastReviewed: new Date(new Date().setDate(new Date().getDate() - 5)).toISOString(),
       nextReview: new Date(new Date().setDate(new Date().getDate() + 10)).toISOString(),

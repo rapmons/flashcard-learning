@@ -113,6 +113,27 @@ export const Dashboard: React.FC = () => {
               <span className="font-semibold">{cumulativeStats.totalSessions}</span>
             </p>
           </div>
+
+          {cumulativeStats.synonymTotalCards > 0 && (
+            <>
+              <div className="border-t border-gray-200 dark:border-gray-700 my-4" />
+              <h3 className="text-md font-semibold text-purple-600 dark:text-purple-400 mb-3">
+                Synonym Quiz
+              </h3>
+              <div className="space-y-2 text-sm">
+                <p className="flex justify-between">
+                  <span className="text-gray-600 dark:text-gray-400">Questions Answered:</span>
+                  <span className="font-semibold text-purple-700 dark:text-purple-300">{cumulativeStats.synonymTotalCards}</span>
+                </p>
+                <p className="flex justify-between">
+                  <span className="text-gray-600 dark:text-gray-400">Accuracy:</span>
+                  <span className="font-semibold text-purple-700 dark:text-purple-300">
+                    {Math.round(cumulativeStats.synonymOverallAccuracy * 100)}%
+                  </span>
+                </p>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

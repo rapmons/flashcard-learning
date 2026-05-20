@@ -132,3 +132,84 @@ export const QuizCard: React.FC<QuizCardProps> = ({
     </div>
   );
 };
+
+export interface SynonymQuizCardProps {
+  card: Flashcard;
+  options: string[];
+  correctOption: string;
+  onAnswer: (selectedSynonym: string, isCorrect: boolean) => void;
+  currentIndex: number;
+  totalCards: number;
+}
+
+export const SynonymQuizCard: React.FC<SynonymQuizCardProps> = ({
+  card,
+  options,
+  correctOption,
+  onAnswer,
+  currentIndex,
+  totalCards,
+}) => {
+  const [answered, setAnswered] = React.useState(false);
+  const [selectedSynonym, setSelectedSynonym] = React.useState<string | null>(null);
+
+  const handleSelect = (synonym: string) => {
+    if (answered) return;
+    const isCorrect = synonym === correctOption;
+    setSelectedSynonym(synonym);
+    setAnswered(true);
+    setTimeout(() => {
+      onAnswer(synonym, isCorrect);
+    }, 1000);
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="text-center text-sm text-gray-600 dark:text-gray-400">
+        Question {currentIndex + 1} of {totalCards}
+      </div>
+
+      <div className="bg-primary-50 dark:bg-primary-900 p-8 rounded-xl text-center shadow-sm border border-primary-100 dark:border-primary-800">
+        <p className="text-sm font-semibold uppercase text-primary-600 dark:text-primary-300 mb-2">
+          Find a synonym for:
+        </p>
+        <p className="text-4xl font-bold text-gray-900 dark:text-white">
+          {card.word}
+        </p>
+        <p className="text-lg text-gray-600 dark:text-gray-400 mt-2 italic">
+          {card.phonetic}
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {options.map((option, idx) => {
+          const isSelected = selectedSynonym === option;
+          const isCorrect = option === correctOption;
+
+          let btnClass = 'border-gray-300 dark:border-gray-600 hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20';
+          
+          if (answered) {
+            if (isCorrect) {
+              btnClass = 'border-green-500 bg-green-50 dark:bg-green-900/40';
+            } else if (isSelected && !isCorrect) {
+              btnClass = 'border-red-500 bg-red-50 dark:bg-red-900/40';
+            } else {
+              btnClass = 'border-gray-200 dark:border-gray-700 opacity-40';
+            }
+          }
+
+          return (
+            <button
+              key={idx}
+              onClick={() => handleSelect(option)}
+              disabled={answered}
+              className={`p-4 rounded-lg border-2 transition text-center ${btnClass}`}
+            >
+              <p className="font-semibold text-lg text-gray-900 dark:text-white">{option}</p>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+};

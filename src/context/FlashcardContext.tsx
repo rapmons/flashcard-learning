@@ -3,7 +3,7 @@ import type { Flashcard, SessionStats, Toast } from '@types';
 import { loadCards, saveCards, loadStats, saveStats } from '@utils/localStorage';
 import { calculateNextReview } from '@utils/spacedRepetition';
 import { updateCardStatus } from '@services/cardService';
-import { updateTodaySession, getTodaySession } from '@services/statsService';
+import { updateTodaySession } from '@services/statsService';
 
 interface FlashcardContextType {
   cards: Flashcard[];
@@ -29,6 +29,7 @@ interface FlashcardContextType {
 
   // Stats actions
   recordReview: (isCorrect: boolean) => void;
+  recordSynonymReview: (isCorrect: boolean) => void;
 
   // Theme actions
   toggleDarkMode: () => void;
@@ -232,10 +233,19 @@ export function FlashcardProvider({ children }: { children: React.ReactNode }) {
 
   const recordReview = useCallback(
     (isCorrect: boolean) => {
-      const todaySession = getTodaySession(state.stats);
-      const correct = (todaySession?.correct ?? 0) + (isCorrect ? 1 : 0);
-      const incorrect = (todaySession?.incorrect ?? 0) + (isCorrect ? 0 : 1);
+      const correct = isCorrect ? 1 : 0;
+      const incorrect = isCorrect ? 0 : 1;
       const updated = updateTodaySession(state.stats, correct, incorrect);
+      dispatch({ type: 'SET_STATS', payload: updated });
+    },
+    [state.stats]
+  );
+
+  const recordSynonymReview = useCallback(
+    (isCorrect: boolean) => {
+      const synonymCorrect = isCorrect ? 1 : 0;
+      const synonymIncorrect = isCorrect ? 0 : 1;
+      const updated = updateTodaySession(state.stats, 0, 0, synonymCorrect, synonymIncorrect);
       dispatch({ type: 'SET_STATS', payload: updated });
     },
     [state.stats]
@@ -257,6 +267,7 @@ export function FlashcardProvider({ children }: { children: React.ReactNode }) {
     showToast,
     removeToast,
     recordReview,
+    recordSynonymReview,
     toggleDarkMode,
   };
 

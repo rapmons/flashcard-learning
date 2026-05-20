@@ -2,39 +2,64 @@ import React, { useState, useMemo } from 'react';
 import { useFlashcard } from '@context/FlashcardContext';
 import { getRandomCards } from '@services/cardService';
 import type { Flashcard } from '@types';
-import { QuizCard } from '@components/ReviewCard';
+import { SynonymQuizCard } from '@components/index';
 import { Button } from '@components/UI';
 import { ChevronLeft, ChevronRight, Trophy } from 'lucide-react';
 
-interface QuizQuestion {
+interface SynonymQuizQuestion {
   card: Flashcard;
-  options: Flashcard[];
+  options: string[];
+  correctOption: string;
 }
 
-export const QuizPage: React.FC<{ onNavigate: (path: string) => void }> = ({ onNavigate }) => {
-  const { cards, reviewCard, showToast, recordReview } = useFlashcard();
+export const SynonymQuizPage: React.FC<{ onNavigate: (path: string) => void }> = ({ onNavigate }) => {
+  const { cards, reviewCard, showToast, recordSynonymReview } = useFlashcard();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [correct, setCorrect] = useState(0);
   const [incorrect, setIncorrect] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
 
-  // Tạo bộ câu hỏi 1 lần duy nhất khi mount (không shuffle lại mỗi render)
-  const questions = useMemo<QuizQuestion[]>(() => {
-    if (cards.length < 2) return [];
-    const quizCards = getRandomCards(cards, Math.min(20, cards.length));
+  // Generate questions
+  const questions = useMemo<SynonymQuizQuestion[]>(() => {
+    // Only cards that have synonyms
+    const eligibleCards = cards.filter(c => c.synonyms && c.synonyms.length > 0);
+    if (eligibleCards.length < 2) return [];
+
+    const quizCards = getRandomCards(eligibleCards, Math.min(20, eligibleCards.length));
+    
     return quizCards.map(card => {
-      const others = cards.filter(c => c.id !== card.id);
-      const wrongOptions = getRandomCards(others, Math.min(3, others.length));
-      const options = [card, ...wrongOptions].sort(() => Math.random() - 0.5);
-      return { card, options };
+      // Pick one correct synonym randomly from this card
+      const correctOption = card.synonyms![Math.floor(Math.random() * card.synonyms!.length)];
+      
+      // Get wrong options (synonyms from OTHER cards)
+      const wrongSynonymsPool = eligibleCards
+        .filter(c => c.id !== card.id)
+        .flatMap(c => c.synonyms || []);
+      
+      // Shuffle and pick up to 3 wrong synonyms
+      const wrongOptions = [...wrongSynonymsPool]
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 3);
+        
+      // Ensure we always have 4 options even if there aren't enough other synonyms (fallback to some words)
+      while (wrongOptions.length < 3) {
+        const randomCard = cards[Math.floor(Math.random() * cards.length)];
+        if (randomCard.id !== card.id && !wrongOptions.includes(randomCard.word)) {
+          wrongOptions.push(randomCard.word); // fallback to using a word as a wrong option
+        }
+      }
+
+      const options = [correctOption, ...wrongOptions].sort(() => Math.random() - 0.5);
+      
+      return { card, options, correctOption };
     });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (cards.length < 2) {
+  if (cards.filter(c => c.synonyms && c.synonyms.length > 0).length < 2) {
     return (
       <div className="text-center py-12">
         <p className="text-xl text-gray-600 dark:text-gray-400 mb-4">
-          Cần ít nhất 2 flashcard để chơi Quiz!
+          Cần ít nhất 2 thẻ có từ đồng nghĩa (synonyms) để chơi Synonym Quiz!
         </p>
         <Button onClick={() => onNavigate('/')}>
           Back to Dashboard
@@ -47,7 +72,7 @@ export const QuizPage: React.FC<{ onNavigate: (path: string) => void }> = ({ onN
     return (
       <div className="text-center py-12">
         <p className="text-xl text-gray-600 dark:text-gray-400 mb-4">
-          No cards available for quiz!
+          Không có đủ câu hỏi cho Synonym Quiz!
         </p>
         <Button onClick={() => onNavigate('/')}>
           Back to Dashboard
@@ -56,7 +81,7 @@ export const QuizPage: React.FC<{ onNavigate: (path: string) => void }> = ({ onN
     );
   }
 
-  // Màn hình kết quả
+  // Result screen
   if (isFinished) {
     const total = correct + incorrect;
     const accuracy = total > 0 ? (correct / total) * 100 : 0;
@@ -64,7 +89,7 @@ export const QuizPage: React.FC<{ onNavigate: (path: string) => void }> = ({ onN
       <div className="max-w-lg mx-auto text-center py-16 space-y-6">
         <Trophy size={64} className="mx-auto text-yellow-400" />
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-          Quiz Completed!
+          Synonym Quiz Completed!
         </h1>
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow p-8 space-y-4">
           <div className="grid grid-cols-3 gap-4 text-center">
@@ -108,19 +133,19 @@ export const QuizPage: React.FC<{ onNavigate: (path: string) => void }> = ({ onN
     );
   }
 
-  const { card: currentCard, options } = questions[currentIndex];
+  const { card: currentCard, options, correctOption } = questions[currentIndex];
 
-  const handleAnswer = (_selectedCard: Flashcard, isCorrect: boolean) => {
+  const handleAnswer = (_synonym: string, isCorrect: boolean) => {
     if (isCorrect) {
       setCorrect(prev => prev + 1);
       reviewCard(currentCard.id, 5);
-      recordReview(true);
+      recordSynonymReview(true);
       showToast('Correct! 🎉', 'success');
     } else {
       setIncorrect(prev => prev + 1);
       reviewCard(currentCard.id, 1);
-      recordReview(false);
-      showToast('Incorrect! 😅', 'error');
+      recordSynonymReview(false);
+      showToast('Incorrect! 😢', 'error');
     }
 
     setTimeout(() => {
@@ -137,7 +162,7 @@ export const QuizPage: React.FC<{ onNavigate: (path: string) => void }> = ({ onN
       <div className="mb-8 relative">
         <div className="flex justify-between items-center mb-2">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Quiz Mode
+            Synonym Quiz
           </h1>
           <Button variant="secondary" size="sm" onClick={() => onNavigate('/')}>
             Exit Quiz
@@ -164,10 +189,11 @@ export const QuizPage: React.FC<{ onNavigate: (path: string) => void }> = ({ onN
         </div>
       </div>
 
-      <QuizCard
+      <SynonymQuizCard
         key={currentCard.id}
         card={currentCard}
         options={options}
+        correctOption={correctOption}
         onAnswer={handleAnswer}
         currentIndex={currentIndex}
         totalCards={questions.length}

@@ -154,6 +154,40 @@ export const StatsPage: React.FC = () => {
             ))}
           </div>
         </div>
+
+        {cumulativeStats.synonymTotalCards > 0 && (
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow md:col-span-2">
+            <h2 className="text-lg font-semibold text-purple-600 dark:text-purple-400 mb-4">
+              Synonym Quiz Performance
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Questions</p>
+                <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                  {cumulativeStats.synonymTotalCards}
+                </p>
+              </div>
+              <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Correct</p>
+                <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                  {cumulativeStats.synonymTotalCorrect}
+                </p>
+              </div>
+              <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Incorrect</p>
+                <p className="text-2xl font-bold text-red-600 dark:text-red-400">
+                  {cumulativeStats.synonymTotalIncorrect}
+                </p>
+              </div>
+              <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Accuracy</p>
+                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                  {Math.round(cumulativeStats.synonymOverallAccuracy * 100)}%
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

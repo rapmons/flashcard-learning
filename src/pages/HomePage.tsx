@@ -53,7 +53,10 @@ export const HomePage: React.FC<{ onNavigate: (href: string) => void }> = ({
             Daily Review
           </Button>
           <Button onClick={() => onNavigate('/quiz')} variant="secondary">
-            Quiz Mode
+            Vocabulary Quiz
+          </Button>
+          <Button onClick={() => onNavigate('/quiz-synonym')} variant="secondary" className="bg-purple-100 text-purple-700 hover:bg-purple-200 dark:bg-purple-900/40 dark:text-purple-300 dark:hover:bg-purple-900/60 border-purple-200 dark:border-purple-800">
+            Synonym Quiz
           </Button>
         </div>
       </div>

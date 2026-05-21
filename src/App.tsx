@@ -9,6 +9,8 @@ import {
   CardsPage,
   StatsPage,
   SynonymQuizPage,
+  TypingQuizPage,
+  FillInTheBlankQuizPage,
 } from '@pages/index';
 
 function AppContent() {
@@ -35,6 +37,10 @@ function AppContent() {
         return <QuizPage onNavigate={setCurrentPage} />;
       case '/quiz-synonym':
         return <SynonymQuizPage onNavigate={setCurrentPage} />;
+      case '/quiz-typing':
+        return <TypingQuizPage onNavigate={setCurrentPage} />;
+      case '/quiz-fill-in':
+        return <FillInTheBlankQuizPage onNavigate={setCurrentPage} />;
       case '/cards':
         return <CardsPage />;
       case '/stats':

@@ -5,3 +5,5 @@ export * from './QuizPage';
 export * from './CardsPage';
 export * from './StatsPage';
 export * from './SynonymQuizPage';
+export * from './TypingQuizPage';
+export * from './FillInTheBlankQuizPage';

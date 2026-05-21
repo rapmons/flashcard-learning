@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Flashcard } from '@types';
-import { Button } from './UI';
+import { Button, Input } from './UI';
 import { QUALITY_LABELS } from '@constants/index';
 import { FlashcardCard } from './FlashcardCard';
 
@@ -210,6 +210,115 @@ export const SynonymQuizCard: React.FC<SynonymQuizCardProps> = ({
           );
         })}
       </div>
+    </div>
+  );
+};
+
+export interface TypingQuizCardProps {
+  card: Flashcard;
+  onAnswer: (isCorrect: boolean) => void;
+  onAdvance: () => void;
+  currentIndex: number;
+  totalCards: number;
+}
+
+export const TypingQuizCard: React.FC<TypingQuizCardProps> = ({
+  card,
+  onAnswer,
+  onAdvance,
+  currentIndex,
+  totalCards,
+}) => {
+  const [typedWord, setTypedWord] = React.useState('');
+  const [answered, setAnswered] = React.useState(false);
+  const [isCorrect, setIsCorrect] = React.useState<boolean | null>(null);
+  const [hasAttempted, setHasAttempted] = React.useState(false);
+
+  const handleSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (answered && isCorrect) return;
+    if (!typedWord.trim()) return;
+
+    const correct = typedWord.trim().toLowerCase() === card.word.trim().toLowerCase();
+    setIsCorrect(correct);
+    setAnswered(true);
+
+    if (!hasAttempted) {
+      setHasAttempted(true);
+      onAnswer(correct);
+    }
+
+    if (correct) {
+      setTimeout(() => {
+        onAdvance();
+      }, 1000);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTypedWord(e.target.value);
+    if (answered && !isCorrect) {
+      setAnswered(false);
+      setIsCorrect(null);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="text-center text-sm text-gray-600 dark:text-gray-400">
+        Question {currentIndex + 1} of {totalCards}
+      </div>
+
+      <div className="bg-primary-50 dark:bg-primary-900 p-8 rounded-xl text-center shadow-sm border border-primary-100 dark:border-primary-800">
+        <p className="text-sm font-semibold uppercase text-primary-600 dark:text-primary-300 mb-2">
+          Type the English word for:
+        </p>
+        <p className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+          {card.meaning}
+        </p>
+        <p className="text-lg text-gray-600 dark:text-gray-400 mt-2 italic">
+          {card.phonetic}
+        </p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <Input
+            type="text"
+            value={typedWord}
+            onChange={handleChange}
+            placeholder="Type the word here..."
+            disabled={answered && isCorrect === true}
+            className={`text-center text-xl font-bold p-4 ${
+              answered
+                ? isCorrect
+                  ? 'border-green-500 text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/20'
+                  : 'border-red-500 text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-900/20'
+                : ''
+            }`}
+            autoFocus
+            autoComplete="off"
+            spellCheck="false"
+          />
+        </div>
+
+        {answered && isCorrect === false && (
+          <div className="text-center p-3 rounded-lg bg-red-100 dark:bg-red-900/40 border border-red-200 dark:border-red-800 animate-fade-in">
+            <p className="text-sm text-red-600 dark:text-red-400 mb-1">Incorrect. The correct word is:</p>
+            <p className="text-xl font-bold text-red-700 dark:text-red-300 tracking-wide">{card.word}</p>
+            <p className="text-sm text-red-500 dark:text-red-400 mt-2">Please type it correctly to continue.</p>
+          </div>
+        )}
+
+        <Button
+          type="submit"
+          className="w-full h-12 text-lg"
+          variant={answered ? (isCorrect ? 'primary' : 'danger') : 'primary'}
+          disabled={!typedWord.trim() || (answered && isCorrect === true)}
+        >
+          {answered && isCorrect ? 'Correct! 🎉' : 'Submit'}
+        </Button>
+      </form>
     </div>
   );
 };

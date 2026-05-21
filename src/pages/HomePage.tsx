@@ -58,6 +58,12 @@ export const HomePage: React.FC<{ onNavigate: (href: string) => void }> = ({
           <Button onClick={() => onNavigate('/quiz-synonym')} variant="secondary" className="bg-purple-100 text-purple-700 hover:bg-purple-200 dark:bg-purple-900/40 dark:text-purple-300 dark:hover:bg-purple-900/60 border-purple-200 dark:border-purple-800">
             Synonym Quiz
           </Button>
+          <Button onClick={() => onNavigate('/quiz-typing')} variant="secondary" className="bg-indigo-100 text-indigo-700 hover:bg-indigo-200 dark:bg-indigo-900/40 dark:text-indigo-300 dark:hover:bg-indigo-900/60 border-indigo-200 dark:border-indigo-800">
+            Spelling Quiz
+          </Button>
+          <Button onClick={() => onNavigate('/quiz-fill-in')} variant="secondary" className="bg-cyan-100 text-cyan-700 hover:bg-cyan-200 dark:bg-cyan-900/40 dark:text-cyan-300 dark:hover:bg-cyan-900/60 border-cyan-200 dark:border-cyan-800">
+            Fill-in Vocabulary
+          </Button>
         </div>
       </div>
     </div>

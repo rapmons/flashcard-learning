@@ -17,6 +17,75 @@ export const ReviewPage: React.FC<{ onNavigate: (path: string) => void }> = ({ o
   // Phân loại để hiển thị thông tin rõ hơn
   const newCount = cards.filter(c => c.status === 'new').length;
 
+  // Màn hình kết quả sau khi hoàn thành
+  if (isComplete) {
+    const totalCards = reviewed;
+    const accuracy = totalCards > 0 ? ((correct / totalCards) * 100).toFixed(1) : 0;
+    
+    return (
+      <div className="text-center py-16 space-y-6 max-w-lg mx-auto">
+        <CheckCircle size={80} className="mx-auto text-green-500 animate-bounce" />
+        
+        <div className="space-y-2">
+          <h2 className="text-4xl font-bold text-gray-900 dark:text-white">
+            Ôn Tập Xong! 🎉
+          </h2>
+          <p className="text-lg text-gray-600 dark:text-gray-400">
+            Bạn đã hoàn thành bài ôn tập
+          </p>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-xl p-8 space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-4">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Tổng ôn tập</p>
+              <p className="text-3xl font-bold text-primary-600 dark:text-primary-400">
+                {totalCards}
+              </p>
+            </div>
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-4">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Đúng</p>
+              <p className="text-3xl font-bold text-green-600 dark:text-green-400">
+                {correct}
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-4">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Chính xác</p>
+            <p className="text-4xl font-bold text-indigo-600 dark:text-indigo-400">
+              {accuracy}%
+            </p>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-3 pt-4">
+          <Button
+            variant="primary"
+            size="lg"
+            onClick={() => onNavigate('/')}
+            className="w-full"
+          >
+            Quay Lại Dashboard
+          </Button>
+          <Button
+            variant="secondary"
+            size="lg"
+            onClick={() => {
+              setCurrentIndex(0);
+              setReviewed(0);
+              setCorrect(0);
+              setIsComplete(false);
+            }}
+            className="w-full"
+          >
+            Ôn Tập Lại
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   if (reviewCards.length === 0) {
     return (
       <div className="text-center py-16 space-y-4 max-w-lg mx-auto">
@@ -85,74 +154,6 @@ export const ReviewPage: React.FC<{ onNavigate: (path: string) => void }> = ({ o
 
   const learningCount = reviewCards.filter(c => c.status === 'learning').length;
   const overdueCount = reviewCards.filter(c => c.status === 'remembered').length;
-// Màn hình kết quả sau khi hoàn thành
-  if (isComplete) {
-    const totalCards = reviewed;
-    const accuracy = totalCards > 0 ? ((correct / totalCards) * 100).toFixed(1) : 0;
-    
-    return (
-      <div className="text-center py-16 space-y-6 max-w-lg mx-auto">
-        <CheckCircle size={80} className="mx-auto text-green-500 animate-bounce" />
-        
-        <div className="space-y-2">
-          <h2 className="text-4xl font-bold text-gray-900 dark:text-white">
-            Ôn Tập Xong! 🎉
-          </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400">
-            Bạn đã hoàn thành bài ôn tập
-          </p>
-        </div>
-
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-xl p-8 space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-4">
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Tổng ôn tập</p>
-              <p className="text-3xl font-bold text-primary-600 dark:text-primary-400">
-                {totalCards}
-              </p>
-            </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-4">
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Đúng</p>
-              <p className="text-3xl font-bold text-green-600 dark:text-green-400">
-                {correct}
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-4">
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Chính xác</p>
-            <p className="text-4xl font-bold text-indigo-600 dark:text-indigo-400">
-              {accuracy}%
-            </p>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-3 pt-4">
-          <Button
-            variant="primary"
-            size="lg"
-            onClick={() => onNavigate('/')}
-            className="w-full"
-          >
-            Quay Lại Dashboard
-          </Button>
-          <Button
-            variant="secondary"
-            size="lg"
-            onClick={() => {
-              setCurrentIndex(0);
-              setReviewed(0);
-              setCorrect(0);
-              setIsComplete(false);
-            }}
-            className="w-full"
-          >
-            Ôn Tập Lại
-          </Button>
-        </div>
-      </div>
-    );
-  }
 
   
   return (

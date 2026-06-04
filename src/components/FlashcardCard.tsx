@@ -63,8 +63,14 @@ export const FlashcardCard: React.FC<FlashcardProps> = ({
         >
           <div className="text-center">
             <p className="text-sm font-medium opacity-75 mb-2">Từ vựng</p>
-            <h2 className="text-4xl font-bold mb-4 break-words">{card.word}</h2>
-            <p className="text-lg opacity-90 italic">{card.phonetic}</p>
+            <h2 className="text-4xl font-bold mb-3 break-words">{card.word}</h2>
+            <p className="text-lg opacity-90 italic mb-3">{card.phonetic}</p>
+            {card.example && (
+              <div className="bg-white bg-opacity-10 rounded-lg p-3 mt-2">
+                <p className="text-xs font-semibold opacity-75 mb-1 uppercase">Ví dụ</p>
+                <p className="text-sm italic opacity-90">{card.example}</p>
+              </div>
+            )}
           </div>
           <div className="absolute bottom-4 right-4">
             <button
@@ -87,12 +93,7 @@ export const FlashcardCard: React.FC<FlashcardProps> = ({
         >
           <div>
             <p className="text-sm font-medium opacity-75 mb-2">Nghĩa tiếng Việt</p>
-            <h2 className="text-2xl font-bold mb-6">{card.meaning}</h2>
-
-            <div className="bg-white bg-opacity-10 rounded-lg p-4">
-              <p className="text-xs font-semibold opacity-75 mb-2 uppercase">Ví dụ</p>
-              <p className="text-sm italic opacity-90">{card.example}</p>
-            </div>
+            <h2 className="text-2xl font-bold mb-4">{card.meaning}</h2>
           </div>
 
           {card.synonyms && card.synonyms.length > 0 && (
